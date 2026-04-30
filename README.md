@@ -1,4 +1,56 @@
-# HARP-ML-Supplementary## What Each Directory Contains
+# HARP-ML Supplementary Material
+
+This repository contains the replication package for the paper:
+
+> **HARP-ML: A Hybrid Assisted Refactoring Pipeline for ML Code Smells**
+> Gargie Tambe and Y. Raghu Reddy
+> Software Engineering Research Center (SERC)
+> International Institute of Information Technology, Hyderabad, India
+
+## Overview
+
+HARP-ML is a hybrid refactoring framework that addresses ML-specific code
+smells by classifying them into two categories:
+
+- **Type I smells** — syntactically localized anti-patterns resolved via
+  Concrete Syntax Tree (CST) transformations validated through
+  Property-Based Testing (PBT).
+- **Type II smells** — context-dependent smells requiring semantic reasoning,
+  resolved via a Small Language Model (SLM) operating on a focused context
+  window.
+
+This repository contains the supplementary material supporting the paper's
+claims, including the smell taxonomy classification, prompt templates,
+knowledge base entries, PBT invariants, and the CST-based refactoring engine.
+
+## Repository Structure
+
+```
+.
+├── evaluation-repos
+│   ├── niche_repositories.csv
+│   └── README.md
+├── knowledge-base
+│   ├── gradients_not_cleared.json
+│   ├── merge_api_parameter.json
+│   └── README.md
+├── pbt
+│   ├── README.md
+│   ├── test_chain_indexing.py
+│   └── test_dataframe_conversion.py
+├── prompts
+│   ├── gradients_not_cleared.txt
+│   └── merge_api_parameter.txt
+├── README.md
+├── refactoring
+│   ├── cst-refactorer.py
+│   └── README.md
+└── taxanomy
+    ├── README.md
+    └── smell_classification.csv
+```
+
+## What Each Directory Contains
 
 ### `taxonomy/`
 
