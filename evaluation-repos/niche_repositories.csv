@@ -1,0 +1,15 @@
+repository_name,github_url,domain,smells_detected
+adversarial-policies,https://github.com/humancompatibleai/adversarial-policies,Reinforcement Learning,Chain Indexing
+awesome-streamlit,https://github.com/MarcSkovMadsen/awesome-streamlit,Data Applications,"Chain Indexing, Merge API Parameter"
+cherry,https://github.com/learnables/cherry,Reinforcement Learning,Gradients Not Cleared
+ee-outliers,https://github.com/NVISO-BE/ee-outliers,Security ML,Gradients Not Cleared
+EGG,https://github.com/facebookresearch/EGG,Emergent Communication,Gradients Not Cleared
+hep_ml,https://github.com/arogozhnikov/hep_ml,Physics ML,Chain Indexing
+interpret-text,https://github.com/interpretml/interpret-text,NLP,"Chain Indexing, Gradients Not Cleared, Dataframe Conversion API"
+KungFu,https://github.com/lsds/KungFu,Distributed Training,Gradients Not Cleared
+melusine,https://github.com/MAIF/melusine,NLP,"Chain Indexing, Dataframe Conversion API"
+MIScnn,https://github.com/frankkramer-lab/MIScnn,Medical Imaging,"Chain Indexing, Merge API Parameter"
+pytorch_wavelets,https://github.com/fbcotter/pytorch_wavelets,Signal Processing,Gradients Not Cleared
+QPyTorch,https://github.com/Tiiiger/QPyTorch,Low-Precision Training,Gradients Not Cleared
+quantified-self,https://github.com/kachayev/quantified-self,Personal Analytics,Chain Indexing
+torchani,https://github.com/aiqm/torchani,Molecular ML,"Chain Indexing, Gradients Not Cleared"

@@ -1,14 +1,10 @@
 # HARP-ML Knowledge Base
 
-This directory contains the knowledge base entries used by the SLM-based
-refactoring pathway (Type II) in HARP-ML. Each entry is a structured JSON
-file that grounds the SLM's suggestions in smell-specific semantics rather
-than generic code edits.
+This directory contains the knowledge base entries used by the SLM-based refactoring pathway (Type II) in HARP-ML. Each entry is a structured JSON file that grounds the SLM's suggestions in smell-specific semantics rather than generic code edits.
 
 ## Structure
 
-Each JSON file corresponds to one targeted Type II smell and contains the
-following fields:
+Each JSON file corresponds to one targeted Type II smell and contains the following fields:
 
 | Field                   | Description                                                   |
 | ----------------------- | ------------------------------------------------------------- |
@@ -34,23 +30,12 @@ following fields:
 
 ## Relationship to Prompt Templates
 
-The knowledge base entries are comprehensive reference artifacts that document
-the full design space for each smell. The prompt templates in `/prompts` are
-curated subsets of these entries, selected to fit within the model's context
-window while grounding its output in smell-specific semantics. Not all fields
-in the knowledge base are included in every prompt.
+The knowledge base entries are comprehensive reference artifacts that document the full design space for each smell. The prompt templates in `/prompts` are curated subsets of these entries, selected to fit within the model's context window while grounding its output in smell-specific semantics. Not all fields in the knowledge base are included in every prompt.
 
 ## Future Entries
 
-Knowledge base entries for the remaining Type II smells classified in the
-taxonomy — Memory Not Freed, Randomness Uncontrolled, TensorArray Not Used,
-Training/Evaluation Mode Improper Toggling, Deterministic Algorithm Option
-Not Used, and In-Place APIs Misused — will be added as HARP-ML's coverage
-expands to the full taxonomy defined by Zhang et al. (CAIN 2022).
+Knowledge base entries for the remaining Type II smells classified in the taxonomy — Memory Not Freed, Randomness Uncontrolled, TensorArray Not Used, Training/Evaluation Mode Improper Toggling, Deterministic Algorithm Option Not Used, and In-Place APIs Misused — will be added as HARP-ML's coverage expands to the full taxonomy defined by Zhang et al. (CAIN 2022).
 
 ## Reference
 
-Zhang, H., Cruz, L., and van Deursen, A. (2022). Code Smells for Machine
-Learning Applications. In Proceedings of the 1st International Conference
-on AI Engineering: Software Engineering for AI (CAIN '22).
-https://doi.org/10.1145/3522664.3528620
+Zhang, H., Cruz, L., and van Deursen, A. (2022). Code Smells for Machine Learning Applications. In Proceedings of the 1st International Conference on AI Engineering: Software Engineering for AI (CAIN '22). https://doi.org/10.1145/3522664.3528620
