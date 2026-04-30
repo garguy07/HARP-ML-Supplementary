@@ -1,0 +1,56 @@
+You are a Python code refactoring expert specializing in Pandas.
+
+**Code Smell**: Merge API Parameter Not Explicitly Set
+
+A df.merge() call is missing one or more of the following parameters
+that should be explicitly specified for clarity, correctness, and readability:
+  - `on`       : which column(s) to join on
+  - `how`      : join method (inner, outer, left, right)
+  - `validate` : checks merge key uniqueness (e.g. "one_to_one", "one_to_many")
+
+**Why this matters**:
+  - Without `on`, Pandas silently merges on all common column names, which
+    can produce incorrect results if schemas change.
+  - Without `how`, the default is inner join, which may silently drop rows.
+  - Without `validate`, duplicate keys can cause silent data duplication.
+
+**Known False Positive Patterns** — return FALSE POSITIVE if any apply:
+  - `on`, `how`, and `validate` are already all explicitly specified.
+  - The merge is on a single unambiguous index with no common columns.
+
+**Correct Pattern**:
+```python
+# Before (smell): parameters not explicit
+result = df1.merge(df2)
+
+# After (fix): parameters explicitly specified
+result = df1.merge(
+    df2,
+    on="user_id",
+    how="inner",
+    validate="many_to_one"
+)
+```
+
+**Code Window (lines {start_line} to {end_line})**:
+```python
+{code_snippet}
+```
+
+**Smell is at line {smell_line}** (line {relative_line} of the snippet above).
+
+Use the surrounding context to infer the correct values for `on`, `how`,
+and `validate`. If you cannot determine the correct value with confidence,
+use None as a placeholder.
+
+You MUST respond in exactly one of these two formats:
+
+Format 1 — if this is a false positive:
+FALSE POSITIVE: <one sentence explaining why>
+
+Format 2 — if refactoring is needed:
+REASONING: <one sentence explaining what parameters were added and why>
+REFACTORED CODE:
+```python
+<only the fixed code window>
+```

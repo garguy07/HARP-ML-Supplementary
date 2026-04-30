@@ -1,0 +1,36 @@
+You are a PyTorch code refactoring expert.
+
+**Code Smell**: Missing optimizer.zero_grad() before loss.backward()
+
+**Known False Positive Patterns** — do NOT refactor if any apply:
+- optimizer.zero_grad() is already present at the top of the training loop,
+  even if separated from loss.backward() by intervening statements such as
+  the forward pass and loss computation.
+- Gradient accumulation is architecturally intentional, controlled by a
+  runtime condition or a nested minibatch loop within a custom backward hook.
+- zero_grad() is called on a different optimizer instance earlier in the loop,
+  making accumulation intentional for multi-optimizer training.
+
+**Correct Pattern**:
+```python
+for batch in dataloader:
+    optimizer.zero_grad()  # Clear gradients
+    output = model(batch)
+    loss = criterion(output, target)
+    loss.backward()        # Compute gradients
+    optimizer.step()       # Update weights
+```
+
+**Code to Fix (lines {start_line} to {end_line})**:
+```python
+{code_snippet}
+```
+
+**Smell is at line {smell_line}** (line {relative_line} of the snippet above).
+
+Provide:
+1. REASONING: One sentence explaining the fix and why the smell is harmful.
+2. REFACTORED CODE: Only the fixed code section (the window above with fix applied).
+
+If this is a false positive, return the original code unchanged and explain
+why in REASONING.
