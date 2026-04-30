@@ -1,0 +1,37 @@
+{
+    "smell_id": "MAP",
+    "smell_name": "Merge API Parameter Not Explicitly Set",
+    "type": "II",
+    "pipeline_stage": "Data Cleaning",
+    "library": "Pandas",
+    "description": "A df.merge() call is missing one or more of the following parameters: on (or left_on/right_on), how, and validate. Without these, Pandas silently merges on all common column names, defaults to inner join which may drop rows, and does not validate key uniqueness, all of which can cause silent data corruption.",
+    "fix_strategy": "Infer the correct values for on, how, and validate from the surrounding DataFrame definitions, variable names, and comments within the context window. If the correct value cannot be determined with confidence, apply a safe default and insert a # TODO comment flagging the inferred value for developer review.",
+    "defaults": {
+      "on": null,
+      "how": "inner",
+      "validate": "one_to_many"
+    },
+    "canonical_examples": [
+      {
+        "description": "Simple merge missing all three parameters",
+        "before": "result = df1.merge(df2)",
+        "after": "result = df1.merge(\n    df2,\n    on='user_id',\n    how='inner',\n    validate='many_to_one'\n)"
+      },
+      {
+        "description": "Merge where context is insufficient — safe defaults applied",
+        "before": "result = df_a.merge(df_b)",
+        "after": "result = df_a.merge(\n    df_b,\n    on=None,  # TODO: verify join key\n    how='inner',\n    validate='one_to_many'\n)"
+      }
+    ],
+    "false_positive_patterns": [
+      {
+        "description": "All three parameters are already explicitly specified.",
+        "example": "result = df1.merge(df2, on='id', how='inner', validate='one_to_one')"
+      },
+      {
+        "description": "Merge is on a single unambiguous index with left_on and right_on already specified.",
+        "example": "result = df1.merge(df2, left_on='date', right_on='transaction_date', how='left')"
+      }
+    ],
+    "verification_check": "Verify that all three parameters — on (or left_on/right_on), how, and validate — are explicitly present in the refactored merge call."
+  }
