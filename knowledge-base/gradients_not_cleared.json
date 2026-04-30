@@ -1,27 +1,43 @@
 {
-    "smell_id": "GNC",
-    "smell_name": "Gradients Not Cleared Before Backward Propagation",
-    "type": "II",
-    "pipeline_stage": "Model Training",
-    "library": "PyTorch",
-    "description": "optimizer.zero_grad() is absent before loss.backward(), causing gradients to accumulate across iterations from all backward() calls, leading to exploding gradients and failed training.",
-    "fix_strategy": "Insert optimizer.zero_grad() at the correct position before loss.backward() within the training loop. The correct position must be inferred from control flow — it should be inside the training loop, before the forward pass or immediately before loss.backward().",
-    "canonical_examples": [
-      {
-        "description": "Standard training loop missing zero_grad()",
-        "before": "for epoch in range(num_epochs):\n    out = model(X)\n    loss = criterion(out, y)\n    loss.backward()\n    optimizer.step()",
-        "after": "for epoch in range(num_epochs):\n    optimizer.zero_grad()\n    out = model(X)\n    loss = criterion(out, y)\n    loss.backward()\n    optimizer.step()"
-      }
-    ],
-    "false_positive_patterns": [
-      {
-        "description": "zero_grad() is correctly placed at the top of the loop body but separated from loss.backward() by intervening statements such as the forward pass and loss computation.",
-        "example": "for epoch in range(epochs):\n    optimizer.zero_grad()  # correctly placed\n    out = net(torch_X)\n    loss = criterion(out, torch_y)\n    loss.backward()\n    optimizer.step()"
-      },
-      {
-        "description": "Gradient accumulation is architecturally intentional, controlled by a runtime condition or a nested minibatch loop within a custom backward hook.",
-        "example": "for (reps_mb, _), grad_mb in zip(loss_obj.embed_minibatch_iter(...), grad):\n    surrogate = torch.dot(reps_mb.flatten(), grad_mb.flatten()) * grad_output\n    surrogate.backward()"
-      }
-    ],
-    "verification_check": "Verify that optimizer.zero_grad() now appears at the correct position relative to loss.backward() in the training loop — it must be inside the loop and before the backward call."
-  }
+  "smell_id": "GNC",
+  "smell_name": "Gradients Not Cleared Before Backward Propagation",
+  "type": "II",
+  "pipeline_stage": "Model Training",
+  "library": "PyTorch",
+  "description": "optimizer.zero_grad() is absent before loss.backward(), causing gradients to accumulate across iterations from all backward() calls, leading to exploding gradients and failed training.",
+  "fix_strategy": "Insert optimizer.zero_grad() at the correct position before loss.backward() within the training loop. The correct position must be inferred from control flow — it should be inside the training loop, before the forward pass or immediately before loss.backward().",
+  "canonical_examples": [
+    {
+      "description": "Standard training loop missing zero_grad()",
+      "before": "for epoch in range(num_epochs):\n    out = model(X)\n    loss = criterion(out, y)\n    loss.backward()\n    optimizer.step()",
+      "after": "for epoch in range(num_epochs):\n    optimizer.zero_grad()\n    out = model(X)\n    loss = criterion(out, y)\n    loss.backward()\n    optimizer.step()"
+    },
+    {
+      "description": "Training loop with profiler wrapping obscuring the pattern",
+      "before": "timer.start_range('loss-bw')\nloss.backward()\ntimer.end_range('loss-bw')\noptimizer.step()",
+      "after": "timer.start_range('loss-bw')\noptimizer.zero_grad()\nloss.backward()\ntimer.end_range('loss-bw')\noptimizer.step()"
+    }
+  ],
+  "false_positive_patterns": [
+    {
+      "description": "zero_grad() is correctly placed at the top of the loop body but separated from loss.backward() by intervening statements such as the forward pass and loss computation.",
+      "example": "for epoch in range(epochs):\n    optimizer.zero_grad()  # correctly placed\n    out = net(torch_X)\n    loss = criterion(out, torch_y)\n    loss.backward()\n    optimizer.step()"
+    },
+    {
+      "description": "Gradient accumulation is architecturally intentional, controlled by a runtime condition or a nested minibatch loop within a custom backward hook.",
+      "example": "for (reps_mb, _), grad_mb in zip(loss_obj.embed_minibatch_iter(...), grad):\n    surrogate = torch.dot(reps_mb.flatten(), grad_mb.flatten()) * grad_output\n    surrogate.backward()"
+    },
+    {
+      "description": "zero_grad() is called on a different optimizer instance earlier in the loop, making accumulation intentional for multi-optimizer training.",
+      "example": "optimizer_a.zero_grad()\n...\nloss_b.backward()\noptimizer_b.step()"
+    }
+  ],
+  "context_window_hints": [
+    "Look for the enclosing training loop (for epoch in range(...))",
+    "Look for optimizer call sequences (zero_grad, backward, step)",
+    "Look for loss computation before backward()",
+    "Check for nested loops that may indicate intentional gradient accumulation",
+    "Check for multiple optimizer instances"
+  ],
+  "verification_check": "Verify that optimizer.zero_grad() now appears at the correct position relative to loss.backward() in the training loop — it must be inside the loop and before the backward call."
+}
